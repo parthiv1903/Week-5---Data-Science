@@ -1,0 +1,40 @@
+import pandas as pd
+import numpy as np
+from sklearn.impute import SimpleImputer
+from sklearn.preprocessing import StandardScaler
+
+# Load the dataset
+
+df = pd.read_csv("diabetes.csv")
+
+# Step 1: Cleaning the Data
+# Checking for missing values
+print("Missing values before handling:", df.isnull().sum())
+
+# Step 2: Handling Missing Values
+# Replace zeros with NaN in specific columns
+columns_with_zeros = ['Glucose', 'BloodPressure', 'SkinThickness', 'Insulin', 'BMI']
+df[columns_with_zeros] = df[columns_with_zeros].replace(0, np.nan)
+
+# Check the number of missing values after replacement
+print("Missing values after replacing zeros:", df.isnull().sum())
+
+# Impute missing values using the median strategy
+imputer = SimpleImputer(strategy='median')
+df[columns_with_zeros] = imputer.fit_transform(df[columns_with_zeros])
+
+# Step 3: Transformation
+# No additional transformations needed at this point
+
+# Step 4: Normalization
+scaler = StandardScaler()
+df[columns_with_zeros + ['Pregnancies', 'DiabetesPedigreeFunction', 'Age']] = scaler.fit_transform(df[columns_with_zeros + ['Pregnancies', 'DiabetesPedigreeFunction', 'Age']])
+
+# Step 5: Encoding
+# The Outcome column is already encoded
+
+# Step 6: Feature Engineering
+# No new features to add at this point
+
+# Display the first few rows of the preprocessed dataset
+print(df.head())
